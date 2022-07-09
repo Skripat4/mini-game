@@ -46,7 +46,7 @@ call DRAW_SPRITE_8X8
 
 ld d,5
 ld e,2
-call DRAW_SPRITE_8X8
+call DRAW_RECT
 
 ld d,12
 ld e,8
@@ -59,6 +59,24 @@ call DRAW_SPRITE_8X8
 ret
 theudg:
 defb 24,36,114,249,251,126,126,60,20
+
+leftAngleBottomRect:
+defb 255,128,128,128,128,128,128,128
+bottomRect:
+defb 255,0,0,0,0,0,0,0 
+rightAngleBottomRect:
+defb 255,1,1,1,1,1,1,1
+topRect:
+defb 0,0,0,0,0,0,0,255
+rightRect:
+defb 1,1,1,1,1,1,1,1
+rightAngleTopRect:
+defb 1,1,1,1,1,1,1,255
+leftAngleTopRect:
+defb 128,128,128,128,128,128,128,255 
+
+variable:
+defw 5
 
 GIVE_ADR:
 PUSH AF
@@ -84,6 +102,7 @@ call GIVE_ADR
 LD D,H ;HL -> DE -> OFFSET ON SCREEN in MEMORY
 LD E,L
 ld hl,theUdg
+DRAW_SYMB:
 ld b,8
 loop:
 ld a,(hl)
@@ -93,4 +112,38 @@ inc d
 djnz loop
 ld a,(hl)
 ld (hl),a
+ret
+
+DRAW_RECT:
+call GIVE_ADR
+PUSH HL
+LD D,H
+LD E,L
+ld hl,leftAngleBottomRect
+call DRAW_SYMB
+
+
+
+CYCLE_FOR:
+POP HL
+inc HL
+LD D,H
+LD E,L
+PUSH HL
+ld hl,bottomRect
+call DRAW_SYMB
+PUSH HL
+ld hl,variable
+ld a,(HL)
+dec a
+jr nz,haha
+ld (HL),a
+POP HL
+jp gogo
+haha:
+ld (HL),a
+POP HL
+jp CYCLE_FOR
+gogo:
+pop HL
 ret
