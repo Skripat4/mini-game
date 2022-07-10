@@ -113,22 +113,18 @@ djnz loop
 ld a,(hl)
 ld (hl),a
 ret
-
-DRAW_RECT:
+DRAW_RECT:;function draw rect on the screen (thank's cap)
 call GIVE_ADR
 PUSH HL
-LD D,H
-LD E,L
+pop DE
+PUSH HL
 ld hl,leftAngleBottomRect
 call DRAW_SYMB
-
-
-
 CYCLE_FOR:
 POP HL
 inc HL
-LD D,H
-LD E,L
+push hl
+pop de
 PUSH HL
 ld hl,bottomRect
 call DRAW_SYMB
@@ -146,4 +142,47 @@ POP HL
 jp CYCLE_FOR
 gogo:
 pop HL
+inc HL
+push hl
+pop de
+push hl
+ld hl,rightANgleBottomRect
+call DRAW_SYMB
+ld hl,variable
+ld (hl),4
+
+CYCLE_FOR2:
+pop hl
+
+ld de,32
+adc hl,de
+push HL
+pop DE
+push hl
+ld hl,rightRect
+call DRAW_SYMB
+push hl
+ld hl,variable
+ld a,(HL)
+dec a
+jr nz,haha2
+ld (HL),a
+POP HL
+jp gogo2
+haha2:
+ld (HL),a
+POP HL
+jp CYCLE_FOR2
+gogo2:
+pop HL
+ld de,32
+adc hl,de
+push HL
+pop DE
+push hl
+ld hl,rightAngleTopRect
+call DRAW_SYMB
+pop hl
+
+
 ret
