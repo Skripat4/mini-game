@@ -94,13 +94,13 @@ RRA
 RRA
 add a,d
 ld l,a
+push hl ; ld de,hl
+pop de
 pop AF
 ret
 
 DRAW_SPRITE_8x8:
 call GIVE_ADR
-LD D,H ;HL -> DE -> OFFSET ON SCREEN in MEMORY
-LD E,L
 ld hl,theUdg
 DRAW_SYMB:
 ld b,8
@@ -115,8 +115,6 @@ ld (hl),a
 ret
 DRAW_RECT:;function draw rect on the screen (thank's cap)
 call GIVE_ADR
-PUSH HL
-pop DE
 PUSH HL
 ld hl,leftAngleBottomRect
 call DRAW_SYMB
