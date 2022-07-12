@@ -101,6 +101,8 @@ ret
 
 DRAW_SPRITE_8x8:
 call GIVE_ADR
+;DE -> OFFSET ON SCREEN in MEMORY
+
 ld hl,theUdg
 DRAW_SYMB:
 ld b,8
@@ -110,77 +112,80 @@ ld (de),a
 inc hl
 inc d
 djnz loop
-ld a,(hl)
-ld (hl),a
 ret
-DRAW_RECT:;function draw rect on the screen (thank's cap)
+
+DRAW_RECT:;function!
 call GIVE_ADR
-PUSH HL
-ld hl,leftAngleBottomRect
-call DRAW_SYMB
-CYCLE_FOR:
-POP HL
-inc HL
-push hl
-pop de
-PUSH HL
-ld hl,bottomRect
-call DRAW_SYMB
-PUSH HL
-ld hl,variable
-ld a,(HL)
-dec a
-jr nz,haha
-ld (HL),a
-POP HL
-jp gogo
-haha:
-ld (HL),a
-POP HL
-jp CYCLE_FOR
-gogo:
-pop HL
-inc HL
-push hl
-pop de
-push hl
-ld hl,rightANgleBottomRect
-call DRAW_SYMB
-ld hl,variable
-ld (hl),4
+push de
+ld b,3
+l2:
+ld c,32
+ld a,e
+add a,c
+ld e,a
+push de
+djnz l2
 
-CYCLE_FOR2:
-pop hl
-
-ld de,32
-adc hl,de
-push HL
-pop DE
-push hl
-ld hl,rightRect
-call DRAW_SYMB
-push hl
-ld hl,variable
-ld a,(HL)
-dec a
-jr nz,haha2
-ld (HL),a
-POP HL
-jp gogo2
-haha2:
-ld (HL),a
-POP HL
-jp CYCLE_FOR2
-gogo2:
-pop HL
-ld de,32
-adc hl,de
-push HL
-pop DE
-push hl
+;---------------------------------
+ld hl,leftAngleTopRect
+call draw_symb
+pop de
+ld a,e
+add a,3
+ld e,a
 ld hl,rightAngleTopRect
-call DRAW_SYMB
-pop hl
+call draw_symb
+;------------------------------------
+ld b,2
+l3:
+pop de
+push de
+ld hl,leftRect
+push bc
+call draw_symb
+pop bc
 
+pop de
+ld a,e
+add a,3
+ld e,a
+ld hl,rightRect
+push bc
+call draw_symb
+pop bc
+djnz l3
+;-------------------------
+pop de
+push de
+ld hl,leftAngleBottomRect
+call draw_symb
+pop de
+push de
+ld a,e
+add a,3
+ld e,a
+ld hl,rightAngleBottomRect
+call draw_symb
+;-------------------------------
+ld b,2
+l4:
+pop de
+inc de
+push de
+ld hl,bottomRect
+push bc
+call draw_symb
+pop bc
 
+pop de
+push de
+ld a,e
+add a,32*3
+ld e,a
+ld hl,topRect
+push bc
+call draw_symb
+pop bc
+djnz l4
+pop bc
 ret
