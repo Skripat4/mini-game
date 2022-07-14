@@ -56,6 +56,13 @@ ld d,13
 ld e,12
 call DRAW_SPRITE_8X8
 
+
+ld a,2
+call 5633
+ld de,string
+ld bc,eostr-string
+call 8252
+
 ret
 theudg:
 defb 24,36,114,249,251,126,126,60,20
@@ -77,6 +84,9 @@ defb 128,128,128,128,128,128,128,255
 
 variable:
 defw 5
+
+string defb 16,4,17,1,22,3,11,"THE GAME"
+eostr defb 0
 
 GIVE_ADR:
 PUSH AF
