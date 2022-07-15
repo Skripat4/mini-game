@@ -81,6 +81,8 @@ rightAngleTopRect:
 defb 1,1,1,1,1,1,1,255
 leftAngleTopRect:
 defb 128,128,128,128,128,128,128,255 
+leftRect:
+defb 128,128,128,128,128,128,128,128
 
 variable:
 defw 5
