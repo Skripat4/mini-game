@@ -46,7 +46,7 @@ call DRAW_SPRITE_8X8
 
 ld d,5
 ld e,2
-call DRAW_RECT
+call FUNC_DRAW_RECT
 
 ld d,12
 ld e,8
@@ -125,82 +125,80 @@ inc hl
 inc d
 djnz loop
 ret
-
-DRAW_RECT:;function!
-call GIVE_ADR
+FUNC_DRAW_RECT:
+ld d,3;x
+ld e,1 ;y
 push de
-ld b,3
-l2:
-ld c,32
-ld a,e
-add a,c
-ld e,a
-push de
-djnz l2
-
-;---------------------------------
-ld hl,leftAngleTopRect
-call draw_symb
-pop de
-ld a,e
-add a,3
-ld e,a
-ld hl,rightAngleTopRect
-call draw_symb
-;------------------------------------
-ld b,2
-l3:
-pop de
-push de
-ld hl,leftRect
-push bc
-call draw_symb
-pop bc
-
-pop de
-ld a,e
-add a,3
-ld e,a
-ld hl,rightRect
-push bc
-call draw_symb
-pop bc
-djnz l3
-;-------------------------
-pop de
-push de
+call give_adr
 ld hl,leftAngleBottomRect
 call draw_symb
+ld b,3
+hoho:
 pop de
+inc d
 push de
-ld a,e
-add a,3
-ld e,a
-ld hl,rightAngleBottomRect
-call draw_symb
-;-------------------------------
-ld b,2
-l4:
-pop de
-inc de
-push de
-ld hl,bottomRect
 push bc
+call give_adr
+ld hl,bottomRect
 call draw_symb
 pop bc
+djnz hoho
 
 pop de
+inc d
 push de
-ld a,e
-add a,32*3
-ld e,a
-ld hl,topRect
+call give_adr
+ld hl,rightAngleBottomRect
+call draw_symb
+ld b,7
+hoho2:
+pop de
+inc e
+push de
 push bc
+call give_adr
+ld hl,rightRect
 call draw_symb
 pop bc
-djnz l4
+djnz hoho2
+pop de
+inc e
+push de
+call give_adr
+ld hl,rightAngleTopRect
+call draw_symb
+ld b,3
+hoho3:
+pop de
+dec d
+push de
+push bc
+call give_adr
+ld hl,topRect
+call draw_symb
 pop bc
-ret
+djnz hoho3
+pop de
+dec d
+push de
+call give_adr
+ld hl,leftAngleTopRect
+call draw_symb
+ld b,7
+hoho4:
+pop de
+dec e
+push de
+push bc
+call give_adr
+ld hl,leftRect
+call draw_symb
+pop bc
+djnz hoho4
+pop de 
+exit:
+RET
+
 
 ;               0     1     2    3     4     5     6      7     8    9     10    11    12    13    14    15    16    17   18     19     20    21      
 tableY: defw 16384,16416,16448,16480,16512,16544,16576,16608,18432,18464,18496,18528,18560,18592,18624,18656,20480,20512,20544,20576,20608,20640
